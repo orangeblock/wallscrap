@@ -13,8 +13,11 @@
         * as well as an amount argument.
         * Defaults to 50 random wps if no arguments given.
 
-    --- Bugs:
+    --- * - Bugs / - Temp fixes:
         * Termination issues if internet goes down during download.
+        / Kill python process.
+        * Gets really slow without telling why, when wallbase.cc has server issues.
+        / Just wait :P
 
 """
 import re
@@ -136,4 +139,4 @@ if __name__ == '__main__':
     wp_queue.join()
     copy_queue.join()
 
-    print time.time() - start
+    print 'Total time: {}s'.format(time.time() - start)
