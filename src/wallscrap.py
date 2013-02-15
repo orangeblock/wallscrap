@@ -21,6 +21,7 @@ import random
 import Queue
 import cookielib
 import getpass
+import workers
 from parse import *
 from workers import *
 
@@ -110,7 +111,7 @@ def run():
         t.setDaemon(True)
         t.start()
 
-    print 'Retrieving urls...'
+    print 'Retrieving page urls...'
     urls, data = get_urls(args)
     for url in urls:
         page_queue.put( (url, data) )
@@ -133,7 +134,7 @@ def run():
 
     # leave only up to given amount of wps
     total = args.a if temp_queue.qsize() > args.a else temp_queue.qsize()
-    print 'Copying wallpapers...'
+    print 'Downloading wallpapers...'
     for i in range(total):
         wp_queue.put(temp_queue.get())
 
@@ -144,7 +145,8 @@ def run():
         time.sleep(1)
 
     print 'Done.'
-    print 'Total time: {}s'.format(time.time() - start)
+    print '{0}/{1} copied successfully'.format(workers.total, args.a)
+    print 'Total time: {:.2f}s'.format(time.time() - start)
 
 if __name__ == '__main__':
     try:
