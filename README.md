@@ -11,7 +11,7 @@ To download 50 random wallpapers use:
 
 `python wallscrap.py` or `python wallscrap.py -r`  
 
-To download a collection use:
+To download a collection (up to -a amount, see below) use:
 
 `python wallscrap.py -c <url>`
 
@@ -21,6 +21,8 @@ where `<url>` must be a valid wallbase url.
 To make a query and download the results use:
 
 `python wallscrap.py -s <query>`
+
+For queries with more than one word use double quotes.
 
 The default download amount is 50. To change that use the `-a` flag like so:
 
