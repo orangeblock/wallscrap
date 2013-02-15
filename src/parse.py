@@ -48,7 +48,7 @@ def parse_args():
     ###===---</ Type functions >---===###
 
 
-    parser = argparse.ArgumentParser(description='A handy scraping tool for wallbase.cc!', epilog='Made by orangeblock.', version="1.0")
+    parser = argparse.ArgumentParser(description='A handy scraping tool for wallbase.cc!', epilog='Made by orangeblock.')
 
 
     ###===---< Modes >---===###
@@ -100,6 +100,10 @@ def parse_args():
     # Per page
     filters.add_argument('--pp', default='32', choices=['20','32','40','60'],
                          help='Sets the results per page. (default: 32)')
+
+    # Verbose
+    filters.add_argument('-v', '--verbose', action='store_true', default=False,
+                         help='More verbosity')
     ###===---</ Filters >---===###
 
     ###===---< File System >---===###

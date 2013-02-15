@@ -7,17 +7,7 @@
     A handy scraping tool for wallbase.cc.
     Uses multithreading and only core python libraries.
 
-    --- v1.0:
-        * Random, search and collections modes.
-        * Supports board, nsfw, res, res_opt, aspect, perpage filters,
-        * as well as an amount argument.
-        * Defaults to 50 random wps if no arguments given.
-
-    --- * - Bugs / - Temp fixes:
-        * Termination issues if internet goes down during download.
-        / Kill python process.
-        * Gets really slow without telling why, when wallbase.cc has server issues.
-        / Just wait :P
+    See the changelog section in the README for a list of changes.
 
 """
 import re
@@ -56,8 +46,15 @@ def auth(opener):
     return False
 
 def get_search_query(args):
-    query = urllib.urlencode({'query' : args.s[0], 'board' : args.cat, 'res_opt' : args.ropt, 'res' : args.res,
-                              'aspect' : args.ar, 'nsfw': args.n, 'thpp' : args.pp, 'orderby' : 'relevance', 'orderby_opt' : 'desc'})
+    query = urllib.urlencode({ 'query' : args.s[0], 
+                               'board' : args.cat,
+                               'res_opt' : args.ropt,
+                               'res' : args.res,
+                               'aspect' : args.ar,
+                               'nsfw': args.n,
+                               'thpp' : args.pp,
+                               'orderby' : 'relevance',
+                               'orderby_opt' : 'desc'})
     return query
 
 # TODO: Refactor
@@ -83,8 +80,8 @@ def get_urls(args):
 
     return urls, data
 
-if __name__ == '__main__':
-    args = parse_args()
+def run():
+    args = parse_args()    
     opener = get_opener()
     page_queue = Queue.Queue()
     wp_queue = Queue.Queue()
@@ -113,30 +110,44 @@ if __name__ == '__main__':
         t.setDaemon(True)
         t.start()
 
+    print 'Retrieving urls...'
     urls, data = get_urls(args)
     for url in urls:
         page_queue.put( (url, data) )
 
-    page_queue.join()
+    while page_queue.unfinished_tasks > 0:
+        time.sleep(1)
+
 
     # spawn threads to open each wallpaper link
     for i in range(concurrent):
-        t = WpGrabber(wp_queue, copy_queue, args.a, opener)
+        t = WpGrabber(wp_queue, copy_queue, args.a, opener, args.verbose)
         t.setDaemon(True)
         t.start()
 
     # spawn threads to copy the wallpapers
     for i in range(concurrent):
-        t = Copier(copy_queue, opener, args.dest)
+        t = Downloader(copy_queue, opener, args.dest, args.verbose)
         t.setDaemon(True)
         t.start()
 
     # leave only up to given amount of wps
     total = args.a if temp_queue.qsize() > args.a else temp_queue.qsize()
+    print 'Copying wallpapers...'
     for i in range(total):
         wp_queue.put(temp_queue.get())
 
-    wp_queue.join()
-    copy_queue.join()
+    while wp_queue.unfinished_tasks > 0:
+        time.sleep(1)
 
+    while copy_queue.unfinished_tasks > 0:
+        time.sleep(1)
+
+    print 'Done.'
     print 'Total time: {}s'.format(time.time() - start)
+
+if __name__ == '__main__':
+    try:
+        run()
+    except KeyboardInterrupt:
+        print 'KeyboardInterrupt'
