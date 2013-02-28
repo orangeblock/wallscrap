@@ -33,6 +33,10 @@ Of course you can mix these up and add filters like resolution, purity, board, e
 `python wallscrap.py --help`  
 
 ##Changelog
+v1.2
+
+    * Merged code into a single file for easier portability. Everything works as before.
+
 v1.1  
 
     * Program responds to keyboard interrupts (Ctrl+C).  
