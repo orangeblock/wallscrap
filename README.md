@@ -1,4 +1,6 @@
-#Wallscrap
+#Wallscrap  
+
+<b>*** This program is incompatible with the new wallbase site. If and when the admin of the site returns I will update the code. ***</b>
 
 ## Description
 A handy wallbase.cc scraper to be used through the command line.
