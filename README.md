@@ -44,10 +44,7 @@ v1.1
     * Program responds to keyboard interrupts (Ctrl+C).  
       Use them when program seems unresponsive (usually when internet connection crashes).
 
-    * Doesn't download existing files twice (although if wallbase changes wp IDs,  
-      this could lead to non-existent files not being downloaded). In general, you should not  
-      use the same folder for consecutive downloads over a long period of time (say >1 hour),  
-      unless wallbase actually has a constant unique ID for each wp.
+    * Doesn't download existing files twice.
 
     * More verbose output. Also, added -v/--verbose option for even more verbosity madness!  
     
